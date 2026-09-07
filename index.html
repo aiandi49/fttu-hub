@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F.T.T.U — From Them… to Us…</title>
+<meta name="description" content="F.T.T.U is a growing directory of Black-owned institutions — banks first, then farms, then everything else. Send the dollar somewhere it comes back around.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#08222b;
+    --ocean-deep:#0b3a4a;
+    --ocean:#12668a;
+    --turquoise:#0f9b8e;
+    --aqua:#3fc7c1;
+    --seafoam:#bdeee0;
+    --coral:#ff7a68;
+    --paper:#fbfdfc;
+    --paper-dim:#f1f7f6;
+    --line:rgba(8,34,43,0.12);
+    --ink-soft:rgba(8,34,43,0.68);
+
+    --bg:var(--paper);
+    --bg-alt:var(--paper-dim);
+    --text:var(--ink);
+    --text-soft:var(--ink-soft);
+    --card-bg:#ffffff;
+    --card-line:var(--line);
+    --header-bg:rgba(251,253,252,0.86);
+  }
+
+  html{-webkit-text-size-adjust:100%;overflow-x:hidden;}
+  *,*::before,*::after{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    transition:background .35s ease,color .35s ease;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    margin:0;
+    color:var(--text);
+    line-height:1.08;
+  }
+  p{margin:0;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding-left:24px;padding-right:24px;}
+
+  /* ───────────────── DARK MODE ───────────────── */
+  body.dark{
+    --bg:#07181e;
+    --bg-alt:#0c2530;
+    --text:#eef7f5;
+    --text-soft:rgba(238,247,245,0.72);
+    --card-bg:#0e2c36;
+    --card-line:rgba(238,247,245,0.14);
+    --header-bg:rgba(7,24,30,0.86);
+  }
+
+  /* ───────────────── HEADER ───────────────── */
+  header.site{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--header-bg);
+    -webkit-backdrop-filter:blur(10px);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--card-line);
+    padding-top:env(safe-area-inset-top);
+  }
+  .nav-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:14px 22px;
+    padding:16px 24px;
+  }
+  .brand{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:0.5px;
+    white-space:nowrap;
+  }
+  .brand em{font-style:normal;color:var(--turquoise);}
+  nav.links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px 22px;
+    font-size:14.5px;
+  }
+  nav.links a{
+    text-decoration:none;
+    color:var(--text-soft);
+    padding:6px 2px;
+    border-bottom:2px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  nav.links a:hover{color:var(--turquoise);border-color:var(--turquoise);}
+
+  .mode-toggle{
+    border:1px solid var(--card-line);
+    background:var(--card-bg);
+    color:var(--text);
+    border-radius:30px;
+    padding:7px 16px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .mode-toggle:hover{border-color:var(--turquoise);}
+
+  /* ───────────────── HERO ───────────────── */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding:88px 0 110px;
+    background:
+      radial-gradient(900px 480px at 18% -10%, rgba(63,199,193,0.55), transparent 60%),
+      radial-gradient(1000px 600px at 90% 10%, rgba(18,102,138,0.55), transparent 62%),
+      linear-gradient(160deg, var(--ocean-deep) 0%, var(--ink) 62%, #061a21 100%);
+    color:#f4fbfa;
+    text-align:center;
+  }
+  .hero .wrap{position:relative;z-index:2;}
+  .eyebrow{
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    letter-spacing:2.5px;
+    color:var(--seafoam);
+    margin-bottom:22px;
+  }
+  h1.wordmark{
+    font-size:clamp(58px, 15vw, 128px);
+    letter-spacing:2px;
+    background:linear-gradient(100deg,#eafffb 0%, var(--seafoam) 45%, var(--aqua) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero-sub{
+    margin-top:20px;
+    font-family:'Fraunces',serif;
+    font-weight:400;
+    font-style:italic;
+    font-size:clamp(20px,3.4vw,30px);
+    color:#dff5f1;
+  }
+  .hero-copy{
+    margin:30px auto 0;
+    max-width:600px;
+    font-size:17px;
+    color:rgba(244,251,250,0.82);
+  }
+  .hero-actions{
+    margin-top:38px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .btn{
+    display:inline-block;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    text-decoration:none;
+    padding:14px 28px;
+    border-radius:40px;
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+    border:1px solid transparent;
+  }
+  .btn-solid{
+    background:linear-gradient(120deg,var(--turquoise),var(--ocean));
+    color:#fff;
+    box-shadow:0 12px 30px rgba(15,155,142,0.35);
+  }
+  .btn-solid:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(15,155,142,0.45);}
+  .btn-ghost{
+    background:rgba(255,255,255,0.06);
+    border-color:rgba(255,255,255,0.35);
+    color:#f4fbfa;
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,0.14);}
+
+  .wave{
+    display:block;
+    width:100%;
+    height:auto;
+    margin-bottom:-2px;
+  }
+
+  /* ───────────────── MISSION ───────────────── */
+  .mission{
+    background:var(--bg);
+    padding:74px 0 64px;
+    text-align:center;
+  }
+  .mission .kicker{
+    font-size:13px;
+    letter-spacing:2.5px;
+    color:var(--turquoise);
+    margin-bottom:16px;
+    font-weight:600;
+  }
+  .mission h2{
+    font-size:clamp(28px,4.4vw,40px);
+    max-width:760px;
+    margin:0 auto 26px;
+  }
+  .mission p{
+    max-width:640px;
+    margin:0 auto 18px;
+    color:var(--text-soft);
+    font-size:17px;
+  }
+  .mission-quote{
+    margin:40px auto 0;
+    max-width:560px;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--text);
+    padding:26px 30px;
+    border-top:1px solid var(--card-line);
+    border-bottom:1px solid var(--card-line);
+  }
+
+  /* ───────────────── SECTION HEADS ───────────────── */
+  .section{
+    padding:70px 0;
+  }
+  .section.alt{background:var(--bg-alt);}
+  .section-head{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  .section-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:1.5px;
+    color:var(--turquoise);
+    background:rgba(15,155,142,0.1);
+    padding:6px 16px;
+    border-radius:30px;
+    margin-bottom:18px;
+  }
+  .section-tag.soon{color:var(--coral);background:rgba(255,122,104,0.12);}
+  .section-head h2{
+    font-size:clamp(30px,4.6vw,44px);
+    max-width:680px;
+    margin:0 auto 16px;
+  }
+  .section-head p{
+    max-width:560px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:16.5px;
+  }
+
+  /* ───────────────── BANK CARDS ───────────────── */
+  .bank-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:22px;
+  }
+  .bank-card{
+    background:var(--card-bg);
+    border:1px solid var(--card-line);
+    border-top:4px solid var(--accent, var(--turquoise));
+    border-radius:16px;
+    padding:32px 28px;
+    text-align:center;
+    box-shadow:0 18px 40px rgba(8,34,43,0.06);
+  }
+  .bank-card .bank-city{
+    font-size:13px;
+    letter-spacing:1.5px;
+    color:var(--text-soft);
+    margin-bottom:10px;
+  }
+  .bank-card h3{
+    font-size:26px;
+    margin-bottom:14px;
+  }
+  .bank-card p.desc{
+    color:var(--text-soft);
+    font-size:15.5px;
+    margin-bottom:20px;
+  }
+  .fact-list{
+    list-style:none;
+    margin:0 0 24px;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    text-align:left;
+    font-size:14px;
+    color:var(--text-soft);
+    border-top:1px solid var(--card-line);
+    padding-top:18px;
+  }
+  .fact-list li strong{color:var(--text);font-weight:600;}
+  .bank-card .btn-solid{
+    padding:11px 26px;
+    font-size:13.5px;
+    box-shadow:none;
+    background:var(--accent, var(--turquoise));
+  }
+
+  /* ───────────────── FARM CARDS ───────────────── */
+  .farm-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:22px;
+  }
+  .farm-card{
+    background:var(--card-bg);
+    border:1px solid var(--card-line);
+    border-top:4px solid var(--accent, var(--turquoise));
+    border-radius:16px;
+    padding:32px 28px;
+    text-align:center;
+    box-shadow:0 18px 40px rgba(8,34,43,0.06);
+    display:flex;
+    flex-direction:column;
+  }
+  .farm-card .farm-loc{
+    font-size:13px;
+    letter-spacing:1.5px;
+    color:var(--text-soft);
+    margin-bottom:10px;
+  }
+  .farm-card h3{font-size:24px;margin-bottom:6px;}
+  .farm-card .farm-tagline{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:15px;
+    color:var(--turquoise);
+    margin-bottom:14px;
+  }
+  .farm-card p.desc{
+    color:var(--text-soft);
+    font-size:15px;
+    margin-bottom:18px;
+  }
+  .farm-offers{
+    list-style:none;
+    margin:0 0 22px;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+  }
+  .farm-offers li{
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.3px;
+    color:var(--ocean);
+    background:rgba(18,102,138,0.09);
+    padding:6px 12px;
+    border-radius:30px;
+  }
+  .farm-card .how-to-order{
+    font-size:13.5px;
+    color:var(--text-soft);
+    border-top:1px solid var(--card-line);
+    padding-top:16px;
+    margin-bottom:20px;
+    text-align:left;
+  }
+  .farm-card .how-to-order strong{color:var(--text);}
+  .farm-card .btn-solid{
+    padding:11px 26px;
+    font-size:13.5px;
+    box-shadow:none;
+    background:var(--accent, var(--turquoise));
+    margin-top:auto;
+  }
+  .farm-note{
+    max-width:760px;
+    margin:36px auto 0;
+    text-align:center;
+    font-size:14.5px;
+    color:var(--text-soft);
+    padding:18px 22px;
+    border:1px dashed var(--card-line);
+    border-radius:14px;
+  }
+
+  /* ───────────────── COMING SOON ───────────────── */
+  .soon-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .soon-card{
+    background:var(--card-bg);
+    border:1px dashed var(--card-line);
+    border-radius:16px;
+    padding:30px 26px;
+    text-align:center;
+  }
+  .soon-card .soon-icon{
+    width:46px;height:46px;
+    margin:0 auto 16px;
+    border-radius:50%;
+    background:rgba(255,122,104,0.14);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--coral);
+    font-family:'Fraunces',serif;
+    font-weight:700;
+  }
+  .soon-card h3{font-size:20px;margin-bottom:10px;}
+  .soon-card p{color:var(--text-soft);font-size:15px;}
+
+  /* ───────────────── SUGGEST STRIP ───────────────── */
+  .suggest{
+    background:linear-gradient(120deg,var(--ocean-deep),var(--ink));
+    color:#f4fbfa;
+    padding:64px 0;
+    text-align:center;
+  }
+  .suggest h2{color:#f4fbfa;font-size:clamp(26px,4vw,36px);margin-bottom:16px;}
+  .suggest p{color:rgba(244,251,250,0.78);max-width:520px;margin:0 auto 30px;font-size:16px;}
+
+  /* ───────────────── FOOTER ───────────────── */
+  footer{
+    padding:44px 0 calc(38px + env(safe-area-inset-bottom));
+    text-align:center;
+    border-top:1px solid var(--card-line);
+    background:var(--bg);
+  }
+  footer .foot-brand{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    margin-bottom:10px;
+  }
+  footer p{color:var(--text-soft);font-size:13.5px;margin-bottom:6px;}
+
+  /* ───────────────── TABLET / DESKTOP ───────────────── */
+  @media (min-width:700px){
+    .nav-row{justify-content:space-between;padding:18px 32px;}
+    .brand{font-size:24px;}
+
+    .mission{text-align:left;padding:96px 0 80px;}
+    .mission .wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:60px;align-items:start;}
+    .mission h2{margin:0 0 22px;text-align:left;}
+    .mission p{margin:0 0 18px;text-align:left;max-width:none;}
+    .mission-quote{margin:0;text-align:left;max-width:none;}
+    .mission .kicker{text-align:left;}
+
+    .section-head{text-align:left;max-width:680px;margin-left:0;margin-right:0;}
+    .section-head h2, .section-head p{margin-left:0;margin-right:0;text-align:left;}
+
+    .bank-grid{grid-template-columns:repeat(2,1fr);}
+    .bank-card{text-align:left;}
+    .bank-card .btn-solid{display:inline-block;}
+
+    .farm-grid{grid-template-columns:repeat(2,1fr);}
+    .farm-card{text-align:left;}
+    .farm-card .farm-offers{justify-content:flex-start;}
+    .farm-card .btn-solid{display:inline-block;align-self:flex-start;}
+
+    .soon-grid{grid-template-columns:repeat(3,1fr);}
+  }
+
+  @media (min-width:1000px){
+    .bank-grid{grid-template-columns:repeat(3,1fr);}
+    .bank-grid .bank-card:nth-child(4),
+    .bank-grid .bank-card:nth-child(5){grid-column:span 1;}
+
+    .farm-grid{grid-template-columns:repeat(3,1fr);}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <div class="brand">F<em>.</em>T<em>.</em>T<em>.</em>U<em>.</em></div>
+    <nav class="links">
+      <a href="#mission">The Idea</a>
+      <a href="#banking">Banking</a>
+      <a href="#farmers">Farmers</a>
+      <a href="#whats-next">What's Next</a>
+      <a href="#suggest">Suggest a Business</a>
+    </nav>
+    <button class="mode-toggle" id="modeToggle" type="button" aria-pressed="false">
+      <span id="modeIcon">🌙</span><span id="modeLabel">Dark</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">FROM THEM&hellip; TO US&hellip;</p>
+    <h1 class="wordmark">F.T.T.U</h1>
+    <p class="hero-sub">A directory with a direction.</p>
+    <p class="hero-copy">Every dollar you spend already has a home. F.T.T.U keeps a growing list of Black-owned banks, farms, and businesses so that home can be one of ours — no grocery store or middleman required to get there.</p>
+    <div class="hero-actions">
+      <a class="btn btn-solid" href="#banking">See the Banks</a>
+      <a class="btn btn-solid" href="#farmers">Meet the Farmers</a>
+      <a class="btn btn-ghost" href="#mission">Why We Built This</a>
+    </div>
+  </div>
+  <svg class="wave" viewBox="0 0 1440 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,64 C 240,110 480,10 720,40 C 960,70 1200,20 1440,56 L1440,110 L0,110 Z" fill="var(--bg)"></path>
+  </svg>
+</section>
+
+<section class="mission" id="mission">
+  <div class="wrap">
+    <div>
+      <p class="kicker">HOW THIS STARTED</p>
+      <h2>Two sisters, one long phone call, and a question worth building around.</h2>
+      <p>F.T.T.U began as a conversation about where money actually goes once it leaves your hand. Not a boycott. Not a slogan. A simple redirect: when there's a choice — and there almost always is — send the business to an institution owned by the people it serves.</p>
+      <p>This hub opened with banking, because a deposit decides its own future — whether it becomes a mortgage, a small-business loan, a scholarship, or just another line on someone else's balance sheet. Now it includes farmers too, so you can order meat, eggs, and produce straight from the family that raised it, no grocery store in between. Every other industry gets added the same way: verified first, one at a time.</p>
+    </div>
+    <p class="mission-quote">"From them&hellip; to us&hellip;" isn't about where you can't go. It's about where you can go first.</p>
+  </div>
+</section>
+
+<section class="section" id="banking">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">NOW OPEN</span>
+      <h2>Five banks to start with</h2>
+      <p>Five cities, five different histories, one thing in common: they're owned by the community banking with them. Move a checking account, open a savings account, or just ask them about a small-business loan.</p>
+    </div>
+    <div class="bank-grid">
+
+      <div class="bank-card" style="--accent:var(--turquoise)">
+        <p class="bank-city">WASHINGTON, D.C. &amp; LOS ANGELES, CA</p>
+        <h3>City First Bank</h3>
+        <p class="desc">A community development bank built to move capital into low- and moderate-income neighborhoods — affordable housing, nonprofits, and small businesses that traditional lenders pass over.</p>
+        <ul class="fact-list">
+          <li><strong>Founded:</strong> 1998 (as a CDFI in D.C.)</li>
+          <li><strong>Status:</strong> Largest Black-led minority depository institution in the U.S.</li>
+          <li><strong>Also:</strong> Certified B Corp</li>
+        </ul>
+        <a class="btn btn-solid" href="https://www.cityfirstbank.com/" target="_blank" rel="noopener">Visit City First Bank</a>
+      </div>
+
+      <div class="bank-card" style="--accent:var(--ocean)">
+        <p class="bank-city">DURHAM, NORTH CAROLINA</p>
+        <h3>M&amp;F Bank</h3>
+        <p class="desc">Mechanics and Farmers Bank has stood in Durham's Black Wall Street since 1907 — one of the oldest Black-owned banks in the country, and still lending there today.</p>
+        <ul class="fact-list">
+          <li><strong>Founded:</strong> 1907</li>
+          <li><strong>Status:</strong> One of the two oldest Black-owned banks in the U.S.</li>
+          <li><strong>2026 update:</strong> Merging with Optus Bank (SC) to form the nation's largest Black-owned financial institution</li>
+        </ul>
+        <a class="btn btn-solid" href="https://www.mfbonline.com/" target="_blank" rel="noopener">Visit M&amp;F Bank</a>
+      </div>
+
+      <div class="bank-card" style="--accent:var(--aqua)">
+        <p class="bank-city">CHICAGO, ILLINOIS</p>
+        <h3>GN Bank</h3>
+        <p class="desc">Chicago's last remaining Black-owned bank, tracing back to a savings and loan founded in the 1930s so Black families could get mortgages when nobody else would write them one.</p>
+        <ul class="fact-list">
+          <li><strong>Founded:</strong> 1934 (as Illinois Service Federal)</li>
+          <li><strong>Status:</strong> One of roughly a dozen Black-owned banks left nationally</li>
+          <li><strong>Focus:</strong> Personal banking, mortgages, small-business lending</li>
+        </ul>
+        <a class="btn btn-solid" href="https://gnbank.net/" target="_blank" rel="noopener">Visit GN Bank</a>
+      </div>
+
+      <div class="bank-card" style="--accent:var(--turquoise)">
+        <p class="bank-city">NEW ORLEANS, LOUISIANA</p>
+        <h3>Liberty Bank &amp; Trust</h3>
+        <p class="desc">Chartered in 1972 by Dr. Norman C. Francis and Alden McDonald Jr., Liberty grew through acquisitions into the largest Black-owned bank in the country, now with branches across 11 states.</p>
+        <ul class="fact-list">
+          <li><strong>Founded:</strong> 1972</li>
+          <li><strong>Status:</strong> Largest Black-owned bank in the U.S. by assets</li>
+          <li><strong>Footprint:</strong> 11 states, including LA, MI, IL, AL</li>
+        </ul>
+        <a class="btn btn-solid" href="https://www.libertybank.net/" target="_blank" rel="noopener">Visit Liberty Bank</a>
+      </div>
+
+      <div class="bank-card" style="--accent:var(--ocean)">
+        <p class="bank-city">ATLANTA, GEORGIA</p>
+        <h3>Citizens Trust Bank</h3>
+        <p class="desc">Opened in 1921 on Auburn Avenue by five Black businessmen known as "the Fervent Five," after one of them was turned away from a store for a pair of socks.</p>
+        <ul class="fact-list">
+          <li><strong>Founded:</strong> 1921</li>
+          <li><strong>Status:</strong> First Black-owned bank in the FDIC (1934) and Federal Reserve (1947)</li>
+          <li><strong>Today:</strong> One of the largest Black-owned banks in the U.S.</li>
+        </ul>
+        <a class="btn btn-solid" href="https://ctbconnect.com/" target="_blank" rel="noopener">Visit Citizens Trust Bank</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="farmers">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">NOW OPEN</span>
+      <h2>Black-owned farms &amp; ranches, direct to your door</h2>
+      <p>No grocery store in between. Every farm below sells straight to individual households — meat, eggs, and produce shipped or delivered from the family that actually raised it.</p>
+    </div>
+    <div class="farm-grid">
+
+      <div class="farm-card" style="--accent:var(--turquoise)">
+        <p class="farm-loc">HAMPTON, GEORGIA</p>
+        <h3>Swanson Family Farm</h3>
+        <p class="farm-tagline">Farmer Wayne &amp; the Swanson family, since 2008</p>
+        <p class="desc">A 32-acre pasture farm raising grass-fed beef, lamb, goat, and pork the way Wayne's grandparents farmed in New Jersey — no commercial feed, no steroids, no hormones.</p>
+        <ul class="farm-offers">
+          <li>Beef, lamb, goat, pork</li>
+          <li>Ships nationwide</li>
+          <li>Farm pickup available</li>
+        </ul>
+        <p class="how-to-order"><strong>How to order:</strong> Shop bulk beef (1/8, 1/4, whole cow) and cuts directly on their site; local pickup in Hampton, GA.</p>
+        <a class="btn btn-solid" href="https://swansonfamilyfarmllc.com/" target="_blank" rel="noopener">Visit Swanson Family Farm</a>
+      </div>
+
+      <div class="farm-card" style="--accent:var(--ocean)">
+        <p class="farm-loc">PLANT CITY, FLORIDA</p>
+        <h3>Ferguson Farms</h3>
+        <p class="farm-tagline">Family-owned, pasture to doorstep</p>
+        <p class="desc">Grass-fed beef, pasture-raised poultry, and wild-caught seafood, raised without GMOs, antibiotics, or added hormones, shipped frozen for freshness.</p>
+        <ul class="farm-offers">
+          <li>Beef, poultry, seafood</li>
+          <li>Ships nationwide</li>
+          <li>Subscription boxes</li>
+        </ul>
+        <p class="how-to-order"><strong>How to order:</strong> Shop online for farm boxes or à la carte cuts; free shipping over $159, with recurring "Subscribe &amp; Save" delivery.</p>
+        <a class="btn btn-solid" href="https://fergusonfarms.farm/" target="_blank" rel="noopener">Visit Ferguson Farms</a>
+      </div>
+
+      <div class="farm-card" style="--accent:var(--aqua)">
+        <p class="farm-loc">OAKWOOD, TEXAS</p>
+        <h3>Ratcliff Premium Meats</h3>
+        <p class="farm-tagline">Caney Creek Ranch — the Ratcliff family</p>
+        <p class="desc">A woman-owned, Black-owned ranch in East Texas run by Kimberly Ratcliff, a USDA Minority Farm Advisory Committee appointee. Pasture-raised, 21-day dry-aged, USDA-inspected beef, ranch to freezer.</p>
+        <ul class="farm-offers">
+          <li>Grass-fed beef</li>
+          <li>Ships nationwide, frozen</li>
+          <li>Custom cut sheets</li>
+        </ul>
+        <p class="how-to-order"><strong>How to order:</strong> Build a custom box, subscribe monthly, or order a half/whole cow directly on their site.</p>
+        <a class="btn btn-solid" href="https://ratcliffpremiummeats.com/" target="_blank" rel="noopener">Visit Ratcliff Premium Meats</a>
+      </div>
+
+      <div class="farm-card" style="--accent:var(--turquoise)">
+        <p class="farm-loc">NORTHERN NECK, VIRGINIA</p>
+        <h3>Blackbird Farms</h3>
+        <p class="farm-tagline">A cooperative of first-generation Black &amp; Indigenous farmers</p>
+        <p class="desc">Built by farmer Chris Newman and partner farms (including Sylvanaqua Farms) around a shared belief: production and distribution should be owned by the community, not agribusiness. Pasture-raised chicken, eggs, pork, and beef.</p>
+        <ul class="farm-offers">
+          <li>Chicken, eggs, pork, beef</li>
+          <li>Ships to the continental U.S.</li>
+          <li>Local door-to-door in VA/DC/MD</li>
+        </ul>
+        <p class="how-to-order"><strong>How to order:</strong> Ground beef and scrapple ship anywhere in the continental U.S.; the fuller product line delivers direct within their DMV-area route.</p>
+        <a class="btn btn-solid" href="https://blackbirdcoop.com/" target="_blank" rel="noopener">Visit Blackbird Farms</a>
+      </div>
+
+      <div class="farm-card" style="--accent:var(--ocean)">
+        <p class="farm-loc">OAKLAND, CALIFORNIA</p>
+        <h3>Farms to Grow, Inc.</h3>
+        <p class="farm-tagline">Connecting you to a whole network of California growers</p>
+        <p class="desc">A nonprofit founded in 2004 by Dr. Gail P. Myers that links home cooks directly to Black farmers across California through seasonal produce subscriptions — no grocery store markup in between.</p>
+        <ul class="farm-offers">
+          <li>Seasonal produce &amp; value-add goods</li>
+          <li>CSA subscription boxes</li>
+          <li>Bay Area pickup &amp; delivery</li>
+        </ul>
+        <p class="how-to-order"><strong>How to order:</strong> Subscribe to a CSA "Harvest Bag" online; email <a href="mailto:marketing@farmstogrow.com">marketing@farmstogrow.com</a> for wholesale or outside the Bay Area.</p>
+        <a class="btn btn-solid" href="https://www.farmstogrow.org/" target="_blank" rel="noopener">Visit Farms to Grow</a>
+      </div>
+
+      <div class="farm-card" style="--accent:var(--aqua)">
+        <p class="farm-loc">ST. HELENA ISLAND, SOUTH CAROLINA</p>
+        <h3>Gullah Farmers Cooperative</h3>
+        <p class="farm-tagline">Ten Gullah Geechee farm families, one shared packhouse</p>
+        <p class="desc">A cooperative of small Gullah farms on South Carolina's Sea Islands, growing okra, sweet potatoes, greens, and other Lowcountry staples while preserving Gullah Geechee farming tradition.</p>
+        <ul class="farm-offers">
+          <li>Produce &amp; Lowcountry staples</li>
+          <li>Currently bulk / wholesale</li>
+          <li>Serves the Carolinas &amp; Georgia</li>
+        </ul>
+        <p class="how-to-order"><strong>How to order:</strong> Their packhouse is built for schools, hospitals, and retailers right now — reach out directly to ask about ordering as an individual or community group.</p>
+        <a class="btn btn-solid" href="https://gullahfarmers.org/" target="_blank" rel="noopener">Visit Gullah Farmers Co-op</a>
+      </div>
+
+    </div>
+    <p class="farm-note">These six are a starting point, not the whole list — pulled from Black Farmers Index, USDA-recognized cooperatives, and each farm's own site, and worth double-checking availability directly before you order, since small farms sell out fast.</p>
+  </div>
+</section>
+
+<section class="section" id="whats-next">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag soon">COMING TO THE HUB</span>
+      <h2>Banking and farmers are open. There's more being built.</h2>
+      <p>Every category here gets the same standard: independently verified, actually owned by the community it says it serves, before it earns a spot on this page.</p>
+    </div>
+    <div class="soon-grid">
+      <div class="soon-card">
+        <div class="soon-icon">🌾</div>
+        <h3>Asian American Farms</h3>
+        <p>Hmong, Vietnamese, Korean, and other Asian American growers — next up for the same one-on-one, direct-order treatment as the farms above.</p>
+      </div>
+      <div class="soon-card">
+        <div class="soon-icon">🌶️</div>
+        <h3>Hispanic &amp; Latino Farms</h3>
+        <p>Pulling verified, named farms from Latino farmer associations state by state, starting with the regions with the deepest roots.</p>
+      </div>
+      <div class="soon-card">
+        <div class="soon-icon">＋</div>
+        <h3>New Industries</h3>
+        <p>Every industry we can find and verify gets added — one at a time, on the record, no exceptions to the standard above.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="suggest" id="suggest">
+  <div class="wrap">
+    <h2>Know a business that belongs here?</h2>
+    <p>Send us the name, the industry, and how you know it's Black-owned. We'll verify it before it goes up.</p>
+    <a class="btn btn-solid" href="mailto:hello@fttuhub.com?subject=Business%20suggestion%20for%20F.T.T.U.">Suggest a Business</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="foot-brand">F.T.T.U — From Them&hellip; to Us&hellip;</p>
+    <p>Built by two sisters who got tired of asking permission.</p>
+    <p>&copy; <span id="year"></span> F.T.T.U. All information verified independently; no institution listed here has paid for placement.</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  (function(){
+    const root = document.body;
+    const btn = document.getElementById('modeToggle');
+    const icon = document.getElementById('modeIcon');
+    const label = document.getElementById('modeLabel');
+
+    function apply(isDark){
+      root.classList.toggle('dark', isDark);
+      btn.setAttribute('aria-pressed', String(isDark));
+      icon.textContent = isDark ? '☀️' : '🌙';
+      label.textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    const stored = null; // no persistent storage available in a static file
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    apply(prefersDark);
+
+    btn.addEventListener('click', function(){
+      apply(!root.classList.contains('dark'));
+    });
+  })();
+</script>
+
+</body>
+</html>
