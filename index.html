@@ -280,6 +280,32 @@
     color:#f4fbfa;
   }
   .btn-ghost:hover{background:rgba(255,255,255,0.14);}
+  .btn-cta{
+    background:transparent;
+    color:#f4fbfa;
+    border:1.5px solid var(--aqua);
+    box-shadow:0 0 0 1px rgba(63,199,193,0.15), 0 12px 30px rgba(63,199,193,0.18);
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+  }
+  .btn-cta:hover{transform:translateY(-2px);background:rgba(63,199,193,0.1);}
+  .btn-cta .new-tag{
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:var(--aqua);
+    color:var(--ink);
+    padding:2px 7px;
+    border-radius:20px;
+    line-height:1.4;
+  }
+  nav.links a.nav-cta{
+    color:var(--turquoise);
+    font-weight:700;
+  }
+  nav.links a.nav-cta:hover{color:var(--turquoise);}
 
   .wave{
     display:block;
@@ -608,6 +634,7 @@
     <div class="nav-collapse" id="navCollapse">
       <div class="nav-collapse-inner">
         <nav class="links">
+          <a href="fttu-engine.html" class="nav-cta">Ask the Hub</a>
           <a href="#mission">The Idea</a>
           <a href="#banking">Banking</a>
           <a href="#farmers">Farmers</a>
@@ -636,6 +663,7 @@
     <p class="hero-sub">A directory with a direction.</p>
     <p class="hero-copy">Every dollar you spend already has a home. F.T.T.U keeps a growing list of Black-owned banks, farms, and businesses so that home can be one of ours — no grocery store or middleman required to get there.</p>
     <div class="hero-actions">
+      <a class="btn btn-cta" href="fttu-engine.html">Ask F.T.T.U <span class="new-tag">New</span></a>
       <a class="btn btn-solid" href="#banking">See the Banks</a>
       <a class="btn btn-solid" href="#farmers">Meet the Farmers</a>
       <a class="btn btn-ghost" href="#mission">Why We Built This</a>
