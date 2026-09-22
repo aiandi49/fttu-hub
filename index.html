@@ -29,7 +29,13 @@
     --card-bg:#ffffff;
     --card-line:var(--line);
     --header-bg:rgba(251,253,252,0.86);
+
+    --fs-mult:1;
   }
+
+  html.fs-sm{--fs-mult:0.9;}
+  html.fs-lg{--fs-mult:1.15;}
+  html.fs-xl{--fs-mult:1.3;}
 
   html{-webkit-text-size-adjust:100%;overflow-x:hidden;}
   *,*::before,*::after{box-sizing:border-box;}
@@ -80,24 +86,70 @@
     display:flex;
     flex-wrap:wrap;
     align-items:center;
-    justify-content:center;
-    gap:14px 22px;
-    padding:16px 24px;
+    justify-content:space-between;
+    gap:0;
+    padding:14px 20px;
   }
   .brand{
     font-family:'Fraunces',serif;
     font-weight:700;
-    font-size:22px;
+    font-size:calc(22px * var(--fs-mult));
     letter-spacing:0.5px;
     white-space:nowrap;
   }
   .brand em{font-style:normal;color:var(--turquoise);}
+
+  /* burger button — mobile only */
+  .burger{
+    display:inline-flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    width:40px;
+    height:40px;
+    padding:0;
+    border:1px solid var(--card-line);
+    border-radius:10px;
+    background:var(--card-bg);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .burger span{
+    display:block;
+    width:18px;
+    height:2px;
+    background:var(--text);
+    border-radius:2px;
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* collapsible wrapper — holds nav links + controls */
+  .nav-collapse{
+    flex-basis:100%;
+    width:100%;
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .32s ease;
+  }
+  .nav-collapse.open{max-height:520px;}
+  .nav-collapse-inner{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    padding:20px 4px 8px;
+  }
+
   nav.links{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
-    gap:8px 22px;
-    font-size:14.5px;
+    gap:10px 22px;
+    font-size:calc(15px * var(--fs-mult));
   }
   nav.links a{
     text-decoration:none;
@@ -108,6 +160,38 @@
   }
   nav.links a:hover{color:var(--turquoise);border-color:var(--turquoise);}
 
+  .controls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 14px;
+  }
+
+  .font-size-control{
+    display:inline-flex;
+    align-items:center;
+    border:1px solid var(--card-line);
+    background:var(--card-bg);
+    border-radius:30px;
+    padding:4px;
+    gap:2px;
+  }
+  .fs-btn{
+    border:none;
+    background:transparent;
+    color:var(--text-soft);
+    border-radius:22px;
+    padding:6px 11px;
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    line-height:1;
+  }
+  .fs-btn.is-active{background:var(--turquoise);color:#fff;}
+  .fs-btn:hover:not(.is-active){color:var(--turquoise);}
+
   .mode-toggle{
     border:1px solid var(--card-line);
     background:var(--card-bg);
@@ -115,7 +199,7 @@
     border-radius:30px;
     padding:7px 16px;
     font-family:'Inter',sans-serif;
-    font-size:13px;
+    font-size:calc(13px * var(--fs-mult));
     font-weight:600;
     cursor:pointer;
     display:inline-flex;
@@ -139,13 +223,13 @@
   .hero .wrap{position:relative;z-index:2;}
   .eyebrow{
     font-family:'Inter',sans-serif;
-    font-size:13px;
+    font-size:calc(13px * var(--fs-mult));
     letter-spacing:2.5px;
     color:var(--seafoam);
     margin-bottom:22px;
   }
   h1.wordmark{
-    font-size:clamp(58px, 15vw, 128px);
+    font-size:clamp(calc(58px * var(--fs-mult)), calc(15vw * var(--fs-mult)), calc(128px * var(--fs-mult)));
     letter-spacing:2px;
     background:linear-gradient(100deg,#eafffb 0%, var(--seafoam) 45%, var(--aqua) 100%);
     -webkit-background-clip:text;
@@ -157,13 +241,13 @@
     font-family:'Fraunces',serif;
     font-weight:400;
     font-style:italic;
-    font-size:clamp(20px,3.4vw,30px);
+    font-size:clamp(calc(20px * var(--fs-mult)), calc(3.4vw * var(--fs-mult)), calc(30px * var(--fs-mult)));
     color:#dff5f1;
   }
   .hero-copy{
     margin:30px auto 0;
     max-width:600px;
-    font-size:17px;
+    font-size:calc(17px * var(--fs-mult));
     color:rgba(244,251,250,0.82);
   }
   .hero-actions{
@@ -177,7 +261,7 @@
     display:inline-block;
     font-family:'Inter',sans-serif;
     font-weight:600;
-    font-size:14.5px;
+    font-size:calc(14.5px * var(--fs-mult));
     text-decoration:none;
     padding:14px 28px;
     border-radius:40px;
@@ -211,14 +295,14 @@
     text-align:center;
   }
   .mission .kicker{
-    font-size:13px;
+    font-size:calc(13px * var(--fs-mult));
     letter-spacing:2.5px;
     color:var(--turquoise);
     margin-bottom:16px;
     font-weight:600;
   }
   .mission h2{
-    font-size:clamp(28px,4.4vw,40px);
+    font-size:clamp(calc(28px * var(--fs-mult)), calc(4.4vw * var(--fs-mult)), calc(40px * var(--fs-mult)));
     max-width:760px;
     margin:0 auto 26px;
   }
@@ -226,14 +310,14 @@
     max-width:640px;
     margin:0 auto 18px;
     color:var(--text-soft);
-    font-size:17px;
+    font-size:calc(17px * var(--fs-mult));
   }
   .mission-quote{
     margin:40px auto 0;
     max-width:560px;
     font-family:'Fraunces',serif;
     font-style:italic;
-    font-size:22px;
+    font-size:calc(22px * var(--fs-mult));
     color:var(--text);
     padding:26px 30px;
     border-top:1px solid var(--card-line);
@@ -253,7 +337,7 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    font-size:13px;
+    font-size:calc(13px * var(--fs-mult));
     font-weight:600;
     letter-spacing:1.5px;
     color:var(--turquoise);
@@ -264,7 +348,7 @@
   }
   .section-tag.soon{color:var(--coral);background:rgba(255,122,104,0.12);}
   .section-head h2{
-    font-size:clamp(30px,4.6vw,44px);
+    font-size:clamp(calc(30px * var(--fs-mult)), calc(4.6vw * var(--fs-mult)), calc(44px * var(--fs-mult)));
     max-width:680px;
     margin:0 auto 16px;
   }
@@ -272,7 +356,7 @@
     max-width:560px;
     margin:0 auto;
     color:var(--text-soft);
-    font-size:16.5px;
+    font-size:calc(16.5px * var(--fs-mult));
   }
 
   /* ───────────────── BANK CARDS ───────────────── */
@@ -291,18 +375,18 @@
     box-shadow:0 18px 40px rgba(8,34,43,0.06);
   }
   .bank-card .bank-city{
-    font-size:13px;
+    font-size:calc(13px * var(--fs-mult));
     letter-spacing:1.5px;
     color:var(--text-soft);
     margin-bottom:10px;
   }
   .bank-card h3{
-    font-size:26px;
+    font-size:calc(26px * var(--fs-mult));
     margin-bottom:14px;
   }
   .bank-card p.desc{
     color:var(--text-soft);
-    font-size:15.5px;
+    font-size:calc(15.5px * var(--fs-mult));
     margin-bottom:20px;
   }
   .fact-list{
@@ -313,7 +397,7 @@
     flex-direction:column;
     gap:8px;
     text-align:left;
-    font-size:14px;
+    font-size:calc(14px * var(--fs-mult));
     color:var(--text-soft);
     border-top:1px solid var(--card-line);
     padding-top:18px;
@@ -321,7 +405,7 @@
   .fact-list li strong{color:var(--text);font-weight:600;}
   .bank-card .btn-solid{
     padding:11px 26px;
-    font-size:13.5px;
+    font-size:calc(13.5px * var(--fs-mult));
     box-shadow:none;
     background:var(--accent, var(--turquoise));
   }
@@ -344,22 +428,22 @@
     flex-direction:column;
   }
   .farm-card .farm-loc{
-    font-size:13px;
+    font-size:calc(13px * var(--fs-mult));
     letter-spacing:1.5px;
     color:var(--text-soft);
     margin-bottom:10px;
   }
-  .farm-card h3{font-size:24px;margin-bottom:6px;}
+  .farm-card h3{font-size:calc(24px * var(--fs-mult));margin-bottom:6px;}
   .farm-card .farm-tagline{
     font-family:'Fraunces',serif;
     font-style:italic;
-    font-size:15px;
+    font-size:calc(15px * var(--fs-mult));
     color:var(--turquoise);
     margin-bottom:14px;
   }
   .farm-card p.desc{
     color:var(--text-soft);
-    font-size:15px;
+    font-size:calc(15px * var(--fs-mult));
     margin-bottom:18px;
   }
   .farm-offers{
@@ -372,7 +456,7 @@
     gap:8px;
   }
   .farm-offers li{
-    font-size:12.5px;
+    font-size:calc(12.5px * var(--fs-mult));
     font-weight:600;
     letter-spacing:0.3px;
     color:var(--ocean);
@@ -381,7 +465,7 @@
     border-radius:30px;
   }
   .farm-card .how-to-order{
-    font-size:13.5px;
+    font-size:calc(13.5px * var(--fs-mult));
     color:var(--text-soft);
     border-top:1px solid var(--card-line);
     padding-top:16px;
@@ -391,7 +475,7 @@
   .farm-card .how-to-order strong{color:var(--text);}
   .farm-card .btn-solid{
     padding:11px 26px;
-    font-size:13.5px;
+    font-size:calc(13.5px * var(--fs-mult));
     box-shadow:none;
     background:var(--accent, var(--turquoise));
     margin-top:auto;
@@ -400,7 +484,7 @@
     max-width:760px;
     margin:36px auto 0;
     text-align:center;
-    font-size:14.5px;
+    font-size:calc(14.5px * var(--fs-mult));
     color:var(--text-soft);
     padding:18px 22px;
     border:1px dashed var(--card-line);
@@ -430,8 +514,8 @@
     font-family:'Fraunces',serif;
     font-weight:700;
   }
-  .soon-card h3{font-size:20px;margin-bottom:10px;}
-  .soon-card p{color:var(--text-soft);font-size:15px;}
+  .soon-card h3{font-size:calc(20px * var(--fs-mult));margin-bottom:10px;}
+  .soon-card p{color:var(--text-soft);font-size:calc(15px * var(--fs-mult));}
 
   /* ───────────────── SUGGEST STRIP ───────────────── */
   .suggest{
@@ -440,8 +524,8 @@
     padding:64px 0;
     text-align:center;
   }
-  .suggest h2{color:#f4fbfa;font-size:clamp(26px,4vw,36px);margin-bottom:16px;}
-  .suggest p{color:rgba(244,251,250,0.78);max-width:520px;margin:0 auto 30px;font-size:16px;}
+  .suggest h2{color:#f4fbfa;font-size:clamp(calc(26px * var(--fs-mult)), calc(4vw * var(--fs-mult)), calc(36px * var(--fs-mult)));margin-bottom:16px;}
+  .suggest p{color:rgba(244,251,250,0.78);max-width:520px;margin:0 auto 30px;font-size:calc(16px * var(--fs-mult));}
 
   /* ───────────────── FOOTER ───────────────── */
   footer{
@@ -452,15 +536,31 @@
   }
   footer .foot-brand{
     font-family:'Fraunces',serif;
-    font-size:19px;
+    font-size:calc(19px * var(--fs-mult));
     margin-bottom:10px;
   }
-  footer p{color:var(--text-soft);font-size:13.5px;margin-bottom:6px;}
+  footer p{color:var(--text-soft);font-size:calc(13.5px * var(--fs-mult));margin-bottom:6px;}
 
   /* ───────────────── TABLET / DESKTOP ───────────────── */
   @media (min-width:700px){
-    .nav-row{justify-content:space-between;padding:18px 32px;}
-    .brand{font-size:24px;}
+    .nav-row{justify-content:space-between;padding:18px 32px;flex-wrap:nowrap;}
+    .brand{font-size:calc(24px * var(--fs-mult));}
+
+    .burger{display:none;}
+    .nav-collapse{
+      flex-basis:auto;
+      width:auto;
+      max-height:none;
+      overflow:visible;
+    }
+    .nav-collapse-inner{
+      flex-direction:row;
+      align-items:center;
+      justify-content:flex-end;
+      gap:26px;
+      padding:0;
+    }
+    nav.links{justify-content:flex-end;gap:8px 22px;}
 
     .mission{text-align:left;padding:96px 0 80px;}
     .mission .wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:60px;align-items:start;}
@@ -502,16 +602,30 @@
 <header class="site">
   <div class="nav-row">
     <div class="brand">F<em>.</em>T<em>.</em>T<em>.</em>U<em>.</em></div>
-    <nav class="links">
-      <a href="#mission">The Idea</a>
-      <a href="#banking">Banking</a>
-      <a href="#farmers">Farmers</a>
-      <a href="#whats-next">What's Next</a>
-      <a href="#suggest">Suggest a Business</a>
-    </nav>
-    <button class="mode-toggle" id="modeToggle" type="button" aria-pressed="false">
-      <span id="modeIcon">🌙</span><span id="modeLabel">Dark</span>
+    <button class="burger" id="burgerBtn" type="button" aria-expanded="false" aria-controls="navCollapse" aria-label="Open menu">
+      <span></span><span></span><span></span>
     </button>
+    <div class="nav-collapse" id="navCollapse">
+      <div class="nav-collapse-inner">
+        <nav class="links">
+          <a href="#mission">The Idea</a>
+          <a href="#banking">Banking</a>
+          <a href="#farmers">Farmers</a>
+          <a href="#whats-next">What's Next</a>
+          <a href="#suggest">Suggest a Business</a>
+        </nav>
+        <div class="controls">
+          <div class="font-size-control" role="group" aria-label="Text size">
+            <button type="button" class="fs-btn" data-fs="sm" aria-label="Smaller text">A-</button>
+            <button type="button" class="fs-btn is-active" data-fs="md" aria-label="Default text size">A</button>
+            <button type="button" class="fs-btn" data-fs="lg" aria-label="Larger text">A+</button>
+          </div>
+          <button class="mode-toggle" id="modeToggle" type="button" aria-pressed="false">
+            <span id="modeIcon">🌙</span><span id="modeLabel">Dark</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -774,12 +888,52 @@
       label.textContent = isDark ? 'Light' : 'Dark';
     }
 
-    const stored = null; // no persistent storage available in a static file
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    apply(prefersDark);
+    // Always starts in light mode, regardless of system preference.
+    apply(false);
 
     btn.addEventListener('click', function(){
       apply(!root.classList.contains('dark'));
+    });
+  })();
+
+  (function(){
+    const html = document.documentElement;
+    const buttons = document.querySelectorAll('.fs-btn');
+    const classMap = { sm:'fs-sm', md:'', lg:'fs-lg', xl:'fs-xl' };
+
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        html.classList.remove('fs-sm','fs-lg','fs-xl');
+        const cls = classMap[b.dataset.fs];
+        if(cls) html.classList.add(cls);
+        buttons.forEach(function(o){ o.classList.toggle('is-active', o === b); });
+      });
+    });
+  })();
+
+  (function(){
+    const burger = document.getElementById('burgerBtn');
+    const collapse = document.getElementById('navCollapse');
+
+    function setOpen(open){
+      collapse.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+
+    burger.addEventListener('click', function(){
+      setOpen(!collapse.classList.contains('open'));
+    });
+
+    // Close the mobile menu after choosing a link.
+    collapse.querySelectorAll('nav.links a').forEach(function(a){
+      a.addEventListener('click', function(){ setOpen(false); });
+    });
+
+    // Keep menu state sane if the viewport crosses the desktop breakpoint.
+    const mq = window.matchMedia('(min-width:700px)');
+    mq.addEventListener('change', function(e){
+      if(e.matches) setOpen(false);
     });
   })();
 </script>
