@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>F.T.T.U — Concierge Engine (Prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#08222b; --ocean-deep:#0b3a4a; --ocean:#12668a; --turquoise:#0f9b8e;
+    --aqua:#3fc7c1; --seafoam:#bdeee0; --coral:#ff7a68;
+    --paper:#fbfdfc; --paper-dim:#f1f7f6; --line:rgba(8,34,43,0.12); --ink-soft:rgba(8,34,43,0.68);
+    --bg:var(--paper); --bg-alt:var(--paper-dim); --text:var(--ink); --text-soft:var(--ink-soft);
+    --card-bg:#ffffff; --card-line:var(--line); --header-bg:rgba(251,253,252,0.86);
+    --fs-mult:1;
+  }
+  html.fs-sm{--fs-mult:0.9;} html.fs-lg{--fs-mult:1.15;} html.fs-xl{--fs-mult:1.3;}
+  html{-webkit-text-size-adjust:100%; overflow-x:hidden;}
+  *,*::before,*::after{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif;
+    line-height:1.6; transition:background .35s ease,color .35s ease;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; margin:0; color:var(--text); line-height:1.12;}
+  p{margin:0;} a{color:inherit;}
+  .wrap{max-width:960px; margin:0 auto; padding-left:24px; padding-right:24px;}
+
+  body.dark{
+    --bg:#07181e; --bg-alt:#0c2530; --text:#eef7f5; --text-soft:rgba(238,247,245,0.72);
+    --card-bg:#0e2c36; --card-line:rgba(238,247,245,0.14); --header-bg:rgba(7,24,30,0.86);
+  }
+
+  header.site{
+    position:sticky; top:0; z-index:50; background:var(--header-bg);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--card-line); padding-top:env(safe-area-inset-top,0px);
+  }
+  .nav-row{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:16px 24px; flex-wrap:wrap;}
+  .brand{font-family:'Fraunces',serif; font-weight:700; font-size:calc(21px * var(--fs-mult)); white-space:nowrap;}
+  .brand em{font-style:normal; color:var(--turquoise);}
+  .brand small{display:block; font-family:'Inter',sans-serif; font-weight:700; font-size:calc(10.5px * var(--fs-mult)); letter-spacing:2px; color:var(--turquoise); margin-top:2px;}
+  .controls{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .font-size-control{display:inline-flex; align-items:center; border:1px solid var(--card-line); background:var(--card-bg); border-radius:30px; padding:4px; gap:2px;}
+  .fs-btn{border:none; background:transparent; color:var(--text-soft); border-radius:22px; padding:6px 10px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; cursor:pointer; line-height:1;}
+  .fs-btn.is-active{background:var(--turquoise); color:#fff;}
+  .mode-toggle{border:1px solid var(--card-line); background:var(--card-bg); color:var(--text); border-radius:30px; padding:7px 14px; font-family:'Inter',sans-serif; font-size:calc(12.5px * var(--fs-mult)); font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px;}
+  .mode-toggle:hover{border-color:var(--turquoise);}
+
+  .hero{
+    position:relative; overflow:hidden; padding:56px 0 44px;
+    background:
+      radial-gradient(900px 480px at 18% -10%, rgba(63,199,193,0.55), transparent 60%),
+      radial-gradient(1000px 600px at 90% 10%, rgba(18,102,138,0.55), transparent 62%),
+      linear-gradient(160deg, var(--ocean-deep) 0%, var(--ink) 62%, #061a21 100%);
+    color:#f4fbfa; text-align:center;
+  }
+  .hero .wrap{position:relative; z-index:2;}
+  .kicker-pill{
+    display:inline-flex; align-items:center; gap:8px; font-family:'Inter',sans-serif; font-weight:700;
+    font-size:calc(12px * var(--fs-mult)); letter-spacing:2px; color:var(--seafoam);
+    background:rgba(63,199,193,0.14); border:1px solid rgba(63,199,193,0.35);
+    padding:7px 16px; border-radius:30px; margin-bottom:22px; text-transform:uppercase;
+  }
+  .kicker-pill .dot{width:6px; height:6px; border-radius:50%; background:var(--aqua); display:inline-block;}
+  .hero h1{font-size:calc(clamp(30px,4.6vw,46px) * var(--fs-mult)); max-width:760px; margin:0 auto 16px; color:#f4fbfa;}
+  .hero p.sub{font-size:calc(17px * var(--fs-mult)); color:rgba(244,251,250,0.82); max-width:600px; margin:0 auto;}
+
+  .intake{padding:0; margin-top:-30px; position:relative; z-index:3;}
+  .intake-card{
+    background:var(--card-bg); border:1px solid var(--card-line); border-radius:20px;
+    box-shadow:0 24px 60px rgba(8,34,43,0.16); padding:28px;
+  }
+  .intake-card label{display:block; font-family:'Inter',sans-serif; font-weight:700; font-size:calc(13px * var(--fs-mult)); letter-spacing:0.5px; color:var(--text-soft); margin-bottom:10px;}
+  .intake-card textarea{
+    width:100%; min-height:96px; resize:vertical; border:1.5px solid var(--card-line); border-radius:14px;
+    padding:14px 16px; font-family:'Inter',sans-serif; font-size:calc(15.5px * var(--fs-mult)); color:var(--text);
+    background:var(--bg-alt); outline:none; transition:border-color .2s ease;
+  }
+  .intake-card textarea:focus{border-color:var(--turquoise);}
+  .intake-card .examples{margin-top:10px; font-size:calc(13px * var(--fs-mult)); color:var(--text-soft);}
+  .intake-card .examples button{
+    background:none; border:none; color:var(--turquoise); font:inherit; font-weight:600; cursor:pointer; padding:0; text-decoration:underline;
+  }
+  .ask-btn{
+    margin-top:16px; display:inline-flex; align-items:center; gap:10px;
+    background:linear-gradient(120deg,var(--turquoise),var(--ocean)); color:#fff; border:none;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:calc(14.5px * var(--fs-mult));
+    padding:13px 26px; border-radius:40px; cursor:pointer; box-shadow:0 12px 30px rgba(15,155,142,0.3);
+    transition:transform .15s ease;
+  }
+  .ask-btn:hover{transform:translateY(-1px);}
+  .ask-btn:disabled{opacity:0.55; cursor:not-allowed; transform:none;}
+
+  .flow{padding:36px 0 80px;}
+  .flow-card{
+    background:var(--card-bg); border:1px solid var(--card-line); border-radius:18px;
+    padding:26px 28px; margin-top:18px; box-shadow:0 10px 30px rgba(8,34,43,0.06);
+  }
+  .flow-tag{font-family:'Inter',sans-serif; font-weight:700; font-size:calc(11.5px * var(--fs-mult)); letter-spacing:1.8px; color:var(--turquoise); text-transform:uppercase; margin-bottom:10px; display:block;}
+  .flow-card h3{font-size:calc(20px * var(--fs-mult)); margin-bottom:10px;}
+  .flow-card p{font-size:calc(15px * var(--fs-mult)); color:var(--text-soft);}
+  .thinking{display:flex; align-items:center; gap:10px; color:var(--text-soft); font-size:calc(14.5px * var(--fs-mult));}
+  .thinking .spin{width:16px; height:16px; border-radius:50%; border:2px solid var(--card-line); border-top-color:var(--turquoise); animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .qfield{margin-top:16px;}
+  .qfield label{display:block; font-weight:600; font-size:calc(14.5px * var(--fs-mult)); margin-bottom:8px; color:var(--text);}
+  .qfield input{
+    width:100%; border:1.5px solid var(--card-line); border-radius:12px; padding:11px 14px;
+    font-family:'Inter',sans-serif; font-size:calc(14.5px * var(--fs-mult)); background:var(--bg-alt); color:var(--text); outline:none;
+  }
+  .qfield input:focus{border-color:var(--turquoise);}
+
+  .match-card{border-top:4px solid var(--turquoise); }
+  .match-name{font-size:calc(23px * var(--fs-mult)); margin-bottom:6px;}
+  .match-why{font-size:calc(14.5px * var(--fs-mult)); color:var(--text-soft); margin:12px 0 16px; padding-left:16px; border-left:2px solid var(--card-line);}
+  .next-step{background:var(--bg-alt); border-radius:12px; padding:14px 16px; font-size:calc(14px * var(--fs-mult)); margin-top:6px;}
+  .next-step strong{color:var(--turquoise);}
+  .visit-link{
+    display:inline-block; margin-top:16px; background:var(--turquoise); color:#fff; text-decoration:none;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:calc(13.5px * var(--fs-mult)); padding:10px 22px; border-radius:30px;
+  }
+
+  .error-box{border-color:rgba(255,122,104,0.4); background:rgba(255,122,104,0.06);}
+  .error-box .flow-tag{color:var(--coral);}
+
+  .disclosure{
+    max-width:960px; margin:0 auto 70px; padding:0 24px;
+  }
+  .disclosure-inner{
+    border:1px dashed var(--card-line); border-radius:16px; padding:22px 24px; font-size:calc(13.5px * var(--fs-mult)); color:var(--text-soft);
+  }
+  .disclosure-inner strong{color:var(--text);}
+  .badge-live{display:inline-flex; align-items:center; gap:6px; font-size:calc(12px * var(--fs-mult)); font-weight:700; color:var(--turquoise); margin-bottom:8px;}
+  .badge-live .dot{width:7px; height:7px; border-radius:50%; background:var(--turquoise); box-shadow:0 0 0 3px rgba(15,155,142,0.2);}
+
+  footer{padding:34px 0 calc(30px + env(safe-area-inset-bottom)); text-align:center; border-top:1px solid var(--card-line); background:var(--bg);}
+  footer p{color:var(--text-soft); font-size:calc(13px * var(--fs-mult));}
+
+  @media (min-width:700px){
+    .nav-row{padding:16px 32px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-row">
+    <div class="brand">F<em>.</em>T<em>.</em>T<em>.</em>U<em>.</em><small>CONCIERGE ENGINE &middot; PROTOTYPE</small></div>
+    <div class="controls">
+      <div class="font-size-control" role="group" aria-label="Text size">
+        <button type="button" class="fs-btn" data-fs="sm" aria-label="Smaller text">A-</button>
+        <button type="button" class="fs-btn is-active" data-fs="md" aria-label="Default text size">A</button>
+        <button type="button" class="fs-btn" data-fs="lg" aria-label="Larger text">A+</button>
+      </div>
+      <button class="mode-toggle" id="modeToggle" type="button" aria-pressed="false">
+        <span id="modeIcon">🌙</span><span id="modeLabel">Dark</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="kicker-pill"><span class="dot"></span> ASK THE HUB &middot; LIVE PROTOTYPE</div>
+    <h1>Tell it what you need. It matches you to the hub.</h1>
+    <p class="sub">Not a directory to click through — say what you're trying to do, and this asks what it needs to know, then tells you exactly where to go.</p>
+  </div>
+</section>
+
+<section class="intake">
+  <div class="wrap">
+    <div class="intake-card">
+      <label for="askInput">What are you trying to do?</label>
+      <textarea id="askInput" placeholder="e.g. &quot;I want to move my business checking account somewhere Black-owned, I'm in Chicago&quot; or &quot;I want a box of grass-fed beef shipped to Virginia&quot;"></textarea>
+      <div class="examples">
+        Try: <button type="button" class="ex-btn">business banking in Durham</button> &middot;
+        <button type="button" class="ex-btn">grass-fed beef delivered to Virginia</button> &middot;
+        <button type="button" class="ex-btn">a bank that's a certified B Corp</button>
+      </div>
+      <button class="ask-btn" id="askBtn">Ask F.T.T.U <span id="askArrow">→</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="wrap" id="flowWrap"></div>
+</section>
+
+<div class="disclosure">
+  <div class="disclosure-inner">
+    <div class="badge-live"><span class="dot"></span> WHAT'S REAL IN THIS PROTOTYPE</div>
+    <p><strong>Live:</strong> every answer above comes from a real Claude call, reasoning against F.T.T.U's actual directory data (5 banks, 6 farms) that's embedded in this page — the clarifying questions and the final match are generated fresh each time, not scripted.</p>
+    <p style="margin-top:10px;"><strong>Not yet real:</strong> this prototype can't open an account, place an order, or message a business for you — it hands you the right destination and the reason, then the "Visit" link takes you the rest of the way. Turning this into a full autonomous engine (opening the account, filing the request, tracking it) needs a real backend, a database that grows as new businesses are verified, and — where the target service allows it — an integration that can act on your behalf, not just recommend.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>F.T.T.U &middot; Concierge Engine &mdash; a working prototype, not a mockup.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const root = document.body;
+  const btn = document.getElementById('modeToggle');
+  const icon = document.getElementById('modeIcon');
+  const label = document.getElementById('modeLabel');
+  function apply(isDark){
+    root.classList.toggle('dark', isDark);
+    btn.setAttribute('aria-pressed', String(isDark));
+    icon.textContent = isDark ? '☀️' : '🌙';
+    label.textContent = isDark ? 'Light' : 'Dark';
+  }
+  apply(false);
+  btn.addEventListener('click', function(){ apply(!root.classList.contains('dark')); });
+})();
+
+(function(){
+  const html = document.documentElement;
+  const buttons = document.querySelectorAll('.fs-btn');
+  const classMap = { sm:'fs-sm', md:'', lg:'fs-lg', xl:'fs-xl' };
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){
+      html.classList.remove('fs-sm','fs-lg','fs-xl');
+      const cls = classMap[b.dataset.fs];
+      if(cls) html.classList.add(cls);
+      buttons.forEach(function(o){ o.classList.toggle('is-active', o === b); });
+    });
+  });
+})();
+
+// ---- The real F.T.T.U directory data the engine reasons against ----
+const DIRECTORY = {
+  banks: [
+    { name:"City First Bank", city:"Washington, D.C. & Los Angeles, CA", founded:"1998 (as a CDFI in D.C.)", status:"Largest Black-led minority depository institution in the U.S.", notes:"Certified B Corp. Focus: low- and moderate-income neighborhoods, affordable housing, nonprofits, small business.", url:"https://www.cityfirstbank.com/" },
+    { name:"M&F Bank", city:"Durham, North Carolina", founded:"1907", status:"One of the two oldest Black-owned banks in the U.S.", notes:"Standing in Durham's Black Wall Street. 2026: merging with Optus Bank (SC) to form the nation's largest Black-owned financial institution.", url:"https://www.mfbonline.com/" },
+    { name:"GN Bank", city:"Chicago, Illinois", founded:"1934 (as Illinois Service Federal)", status:"One of roughly a dozen Black-owned banks left nationally", notes:"Chicago's last remaining Black-owned bank. Focus: personal banking, mortgages, small-business lending.", url:"https://gnbank.net/" },
+    { name:"Liberty Bank & Trust", city:"New Orleans, Louisiana", founded:"1972", status:"Largest Black-owned bank in the U.S. by assets", notes:"Chartered by Dr. Norman C. Francis and Alden McDonald Jr. Footprint across 11 states including LA, MI, IL, AL.", url:"https://www.libertybank.net/" },
+    { name:"Citizens Trust Bank", city:"Atlanta, Georgia", founded:"1921", status:"First Black-owned bank in the FDIC (1934) and Federal Reserve (1947)", notes:"Opened on Auburn Avenue by five Black businessmen known as 'the Fervent Five.'", url:"https://ctbconnect.com/" }
+  ],
+  farms: [
+    { name:"Swanson Family Farm", city:"Hampton, Georgia", offers:"Beef, lamb, goat, pork", ships:"Nationwide, plus farm pickup", notes:"32-acre pasture farm, grass-fed, no commercial feed/steroids/hormones. Order bulk beef (1/8, 1/4, whole cow).", url:"https://swansonfamilyfarmllc.com/" },
+    { name:"Ferguson Farms", city:"Plant City, Florida", offers:"Beef, poultry, seafood", ships:"Nationwide", notes:"Grass-fed, pasture-raised, no GMOs/antibiotics/hormones. Free shipping over $159, subscription boxes.", url:"https://fergusonfarms.farm/" },
+    { name:"Ratcliff Premium Meats", city:"Oakwood, Texas", offers:"Grass-fed beef", ships:"Nationwide, frozen", notes:"Woman-owned, Black-owned ranch run by Kimberly Ratcliff. 21-day dry-aged, USDA-inspected. Custom cut sheets.", url:"https://ratcliffpremiummeats.com/" },
+    { name:"Blackbird Farms", city:"Northern Neck, Virginia", offers:"Chicken, eggs, pork, beef", ships:"Continental U.S. (ground beef/scrapple); local door-to-door in VA/DC/MD", notes:"Cooperative of first-generation Black & Indigenous farmers.", url:"https://blackbirdcoop.com/" },
+    { name:"Farms to Grow, Inc.", city:"Oakland, California", offers:"Seasonal produce & value-add goods", ships:"Bay Area pickup & delivery; CSA subscription", notes:"Nonprofit connecting home cooks to Black farmers across California.", url:"https://www.farmstogrow.org/" },
+    { name:"Gullah Farmers Cooperative", city:"St. Helena Island, South Carolina", offers:"Produce & Lowcountry staples", ships:"Currently bulk/wholesale, serves the Carolinas & Georgia", notes:"Ten Gullah Geechee farm families, one shared packhouse.", url:"https://gullahfarmers.org/" }
+  ]
+};
+
+const askBtn = document.getElementById('askBtn');
+const askInput = document.getElementById('askInput');
+const flowWrap = document.getElementById('flowWrap');
+
+document.querySelectorAll('.ex-btn').forEach(function(b){
+  b.addEventListener('click', function(){ askInput.value = b.textContent; askInput.focus(); });
+});
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function renderThinking(msg){
+  const div = document.createElement('div');
+  div.className = 'flow-card';
+  div.innerHTML = '<div class="thinking"><span class="spin"></span> ' + esc(msg) + '</div>';
+  flowWrap.appendChild(div);
+  return div;
+}
+
+function renderError(msg){
+  const div = document.createElement('div');
+  div.className = 'flow-card error-box';
+  div.innerHTML = '<span class="flow-tag">Couldn\'t reach the engine</span><p>' + esc(msg) + '</p>';
+  flowWrap.appendChild(div);
+}
+
+function buildPrompt(userInput, qa){
+  let qaBlock = '';
+  if (qa && qa.length){
+    qaBlock = '\n\nThe visitor already answered these follow-ups:\n' + qa.map(function(x){ return '- ' + x.q + ' -> ' + x.a; }).join('\n');
+  }
+  return [
+    'You are the matching engine behind F.T.T.U (From Them... to Us...), a directory of verified Black-owned banks and farms.',
+    'Your only knowledge is the JSON directory below — never invent a business, city, or fact not in it.',
+    '',
+    'DIRECTORY (JSON):', JSON.stringify(DIRECTORY),
+    '',
+    'A visitor typed this need: "' + userInput + '"' + qaBlock,
+    '',
+    'Decide ONE of two things:',
+    '1) If you do not yet have enough to recommend a specific, confident match (e.g. missing location, missing what they actually want to order/open), ask up to 3 short, specific follow-up questions.',
+    '2) If you have enough, pick the single best-matching bank or farm from the directory (or up to 2 if genuinely tied) and explain why in plain, warm, non-salesy language.',
+    '',
+    'Reply with ONLY this JSON shape, no other text:',
+    '{"needs_clarification": boolean,',
+    ' "questions": [string, ...] (only if needs_clarification is true, else empty array),',
+    ' "matches": [{"name": string, "type": "bank"|"farm", "why": string, "next_step": string, "url": string}, ...] (only if needs_clarification is false, else empty array)}',
+    '',
+    'Keep "why" to 1-2 sentences grounded in the directory facts above. "next_step" is one concrete, specific action for this visitor.'
+  ].join('\n');
+}
+
+async function runQuery(userInput, qa){
+  flowWrap.innerHTML = '';
+  askBtn.disabled = true;
+  const thinkingEl = renderThinking('Reading what you need...');
+
+  let sample;
+  try {
+    sample = await window.claude.use('sample');
+  } catch(e){
+    sample = null;
+  }
+
+  if (!sample){
+    thinkingEl.remove();
+    renderError('This view can\'t reach Claude right now (the "sample" capability isn\'t available here) — this can happen if the page was opened outside a Claude viewer, or usage wasn\'t granted. The reasoning code is real and working; it just needs a Claude-enabled viewer to run.');
+    askBtn.disabled = false;
+    return;
+  }
+
+  try {
+    const prompt = buildPrompt(userInput, qa);
+    const data = await sample.json(prompt, { modelTier: 'default', cache: false });
+    thinkingEl.remove();
+
+    if (data && data.needs_clarification && data.questions && data.questions.length){
+      renderQuestions(userInput, data.questions, qa || []);
+    } else if (data && data.matches && data.matches.length){
+      renderMatches(data.matches);
+    } else {
+      renderError('Got an answer back but couldn\'t make sense of its shape. Try rephrasing what you need.');
+    }
+  } catch(e){
+    thinkingEl.remove();
+    if (e && e.code === 'not_granted'){
+      renderError('You declined (or this account hasn\'t allowed) Claude usage for this page — the rest of the demo needs that to run live.');
+    } else if (e && e.code === 'rate_limited'){
+      renderError('Too many requests right now — wait a moment and try again.');
+    } else {
+      renderError((e && e.message) ? e.message : 'Something went wrong reaching Claude.');
+    }
+  }
+  askBtn.disabled = false;
+}
+
+function renderQuestions(userInput, questions, priorQA){
+  const div = document.createElement('div');
+  div.className = 'flow-card';
+  let html = '<span class="flow-tag">Just need a bit more</span><h3>A couple quick questions</h3>';
+  questions.forEach(function(q, i){
+    html += '<div class="qfield"><label>' + esc(q) + '</label><input type="text" data-q="' + esc(q) + '" id="qf-' + i + '"></div>';
+  });
+  html += '<button class="ask-btn" id="qSubmit" style="margin-top:20px;">Continue <span>→</span></button>';
+  div.innerHTML = html;
+  flowWrap.appendChild(div);
+
+  document.getElementById('qSubmit').addEventListener('click', function(){
+    const newQA = priorQA.slice();
+    questions.forEach(function(q, i){
+      const val = document.getElementById('qf-' + i).value.trim();
+      if (val) newQA.push({ q: q, a: val });
+    });
+    runQuery(userInput, newQA);
+  });
+}
+
+function renderMatches(matches){
+  matches.forEach(function(m){
+    const div = document.createElement('div');
+    div.className = 'flow-card match-card';
+    div.innerHTML =
+      '<span class="flow-tag">' + (m.type === 'bank' ? 'Matched bank' : 'Matched farm') + '</span>' +
+      '<h3 class="match-name">' + esc(m.name) + '</h3>' +
+      '<p class="match-why">' + esc(m.why) + '</p>' +
+      '<div class="next-step"><strong>Next step:</strong> ' + esc(m.next_step) + '</div>' +
+      (m.url ? '<a class="visit-link" href="' + esc(m.url) + '" target="_blank" rel="noopener">Visit ' + esc(m.name) + '</a>' : '');
+    flowWrap.appendChild(div);
+  });
+}
+
+askBtn.addEventListener('click', function(){
+  const val = askInput.value.trim();
+  if (!val) { askInput.focus(); return; }
+  runQuery(val, []);
+});
+askInput.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ askBtn.click(); }
+});
+</script>
+
+</body>
+</html>
