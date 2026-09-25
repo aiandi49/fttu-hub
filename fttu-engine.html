@@ -637,13 +637,27 @@ greet(); renderCards([]);
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition, note=$('voiceNote');
   if(!SR){ micBtn.hidden=true; return; }
   var rec=new SR(); rec.lang='en-US'; rec.interimResults=true; rec.continuous=true;
-  var on=false, timer=null;
-  function stopUI(){ on=false; clearTimeout(timer); micBtn.classList.remove('on'); micBtn.setAttribute('aria-label','Speak instead'); note.hidden=true; }
-  function arm(){ clearTimeout(timer); timer=setTimeout(function(){ if(on) rec.stop(); },2000); }
-  rec.addEventListener('start',function(){ on=true; micBtn.classList.add('on'); micBtn.setAttribute('aria-label','Stop listening'); note.textContent='Listening… stops after a short pause.'; note.hidden=false; arm(); });
-  rec.addEventListener('end',stopUI);
-  rec.addEventListener('error',function(e){ stopUI(); if(e.error==='not-allowed'||e.error==='permission-denied'){ note.textContent="Microphone access is blocked. Allow it in your browser's site settings to talk instead of type."; note.hidden=false; } });
-  rec.addEventListener('result',function(e){ arm(); var t=''; for(var i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; input.value=t; input.dispatchEvent(new Event('input')); });
+  var on=false, timer=null, gotSpeech=false;
+  function stopUI(){ on=false; clearTimeout(timer); micBtn.classList.remove('on'); micBtn.setAttribute('aria-label','Speak instead'); }
+  // Give a longer grace window before any speech has come in (time to lift the phone and start
+  // talking), then a shorter re-arm window once real speech is flowing and we're waiting for a pause.
+  function arm(ms){ clearTimeout(timer); timer=setTimeout(function(){ if(on) rec.stop(); }, ms); }
+  rec.addEventListener('start',function(){ on=true; gotSpeech=false; micBtn.classList.add('on'); micBtn.setAttribute('aria-label','Stop listening'); note.textContent='Listening… go ahead, take your time.'; note.hidden=false; arm(4000); });
+  rec.addEventListener('end',function(){ stopUI(); if(!gotSpeech) note.textContent='Didn\'t catch anything — tap the mic and try again.'; setTimeout(function(){ note.hidden=true; },2500); });
+  rec.addEventListener('error',function(e){
+    stopUI();
+    var messages={
+      'not-allowed':"Microphone access is blocked. Allow it in your browser's site settings to talk instead of type.",
+      'permission-denied':"Microphone access is blocked. Allow it in your browser's site settings to talk instead of type.",
+      'no-speech':"Didn't hear anything — tap the mic and try again, speaking right after it turns on.",
+      'audio-capture':"No microphone found. Check that one is connected and selected in your browser/OS settings.",
+      'network':"A network hiccup interrupted voice recognition — try again.",
+      'aborted':"" // user-initiated stop, no message needed
+    };
+    var msg = messages.hasOwnProperty(e.error) ? messages[e.error] : ("Voice input stopped ("+e.error+") — try again.");
+    if(msg){ note.textContent=msg; note.hidden=false; setTimeout(function(){ note.hidden=true; },4000); }
+  });
+  rec.addEventListener('result',function(e){ gotSpeech=true; arm(2000); var t=''; for(var i=0;i<e.results.length;i++) t+=e.results[i][0].transcript; input.value=t; input.dispatchEvent(new Event('input')); });
   micBtn.addEventListener('click',function(){ if(on) rec.stop(); else { try{ rec.start(); }catch(e){} } });
 })();
 </script>
